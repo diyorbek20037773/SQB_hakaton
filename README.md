@@ -6,19 +6,23 @@
 
 <br />
 
-<a href="https://github.com/diyorbek20037773/SQB_hakaton">
-  <img src="https://img.shields.io/badge/🚀%20ISHLATIB%20KO'RING-GitHub'da%20Ochish-1f2937?style=for-the-badge&labelColor=4f46e5&color=1f2937" alt="Ishlatib ko'ring" height="56" />
+<a href="https://celebrated-analysis-production-7353.up.railway.app/operator">
+  <img src="https://img.shields.io/badge/🚀%20ISHLATIB%20KO'RING-Live%20Demo-1f2937?style=for-the-badge&labelColor=4f46e5&color=1f2937" alt="Ishlatib ko'ring" height="56" />
 </a>
 
 <br /><br />
 
-### 👉 [**github.com/diyorbek20037773/SQB_hakaton**](https://github.com/diyorbek20037773/SQB_hakaton) 👈
+### 👉 [**celebrated-analysis-production-7353.up.railway.app/operator**](https://celebrated-analysis-production-7353.up.railway.app/operator) 👈
 
-<sub>Loyihani GitHub'dan klonlab, o'z mashinangizda ishga tushiring</sub>
+<sub>Brauzerda ochib, darhol sinab ko'ring — o'rnatish kerak emas</sub>
 
 <br />
 
 > ⚠️ **Muhim:** Ilovani **Google Chrome** brauzerida ishlating.
+
+<br />
+
+<sub>📦 Manba kodi: [github.com/diyorbek20037773/SQB_hakaton](https://github.com/diyorbek20037773/SQB_hakaton)</sub>
 
 <br />
 
@@ -253,10 +257,10 @@ Loyiha **SQB Hackathon** uchun yaratildi — bank operatorlari uchun AI ko'mak v
 
 <div align="center">
 
-### 🔗 Yana bir bor — boshlash uchun
+### 🔗 Live Demo — bir klikda sinab ko'ring
 
-# [github.com/diyorbek20037773/SQB_hakaton](https://github.com/diyorbek20037773/SQB_hakaton)
+# [celebrated-analysis-production-7353.up.railway.app/operator](https://celebrated-analysis-production-7353.up.railway.app/operator)
 
-<sub>⭐ Yoqdimi? GitHub'da star bering!</sub>
+<sub>📦 Manba kodi: [github.com/diyorbek20037773/SQB_hakaton](https://github.com/diyorbek20037773/SQB_hakaton) — ⭐ Yoqdimi? Star bering!</sub>
 
 </div>
