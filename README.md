@@ -38,7 +38,7 @@
 
 ## 📖 Loyiha haqida
 
-**ASTA** — bu SQB bank operatorlari mijoz bilan jonli telefon suhbati paytida real vaqtda AI yordami beradigan **copilot** tizimi. Operator gapirayotgan paytda tizim:
+**Yulduz AI** — bu SQB bank operatorlari mijoz bilan jonli telefon suhbati paytida real vaqtda AI yordami beradigan **copilot** tizimi. Operator gapirayotgan paytda tizim:
 
 - 🎙️ Mijoz nutqini transkripsiya qiladi (uz-UZ)
 - 🧠 Suhbat kontekstini AI orqali tahlil qiladi
