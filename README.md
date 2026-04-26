@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ASTA — AI Sales & Telephony Assistant
+# ⚡Yulduz AI & Telephony Assistant
 
 ### SQB bank call-center operatorlari uchun real-time AI copilot
 
