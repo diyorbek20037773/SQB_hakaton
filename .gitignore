@@ -64,3 +64,6 @@ desktop.ini
 # Project-specific
 SQB/frontend/app.zip
 SQB/backend/asta.db
+
+# Root-level geojson source (real copy lives in SQB/frontend/public/geo/)
+/uz-*.geojson
