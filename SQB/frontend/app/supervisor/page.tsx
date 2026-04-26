@@ -635,13 +635,13 @@ export default function AdminPage() {
   const lowestKyc = kycData.reduce((a, b) => (a.pct < b.pct ? a : b));
 
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-slate-950 relative">
+    <div className="h-full overflow-y-auto bg-slate-950 relative">
       {/* Subtle bg glow */}
       <div className="fixed inset-0 pointer-events-none z-0"
         style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(99,102,241,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(236,72,153,0.04) 0%, transparent 50%)' }} />
 
       {/* ── KPI cards ── */}
-      <div className="relative z-10 flex-shrink-0 px-5 pt-4 pb-0 space-y-3">
+      <div className="relative z-10 px-5 pt-4 pb-0 space-y-3">
         <div className="grid grid-cols-4 gap-3">
           {kpis.map(({ icon: Icon, label, end, decimals, suffix, sub, delta, deltaUp, color, sparkColor, spark }) => (
             <div
@@ -712,7 +712,7 @@ export default function AdminPage() {
       </div>
 
       {/* ── Tab content ── */}
-      <div className="relative z-10 flex-1 overflow-y-auto min-h-0 p-5 pt-4">
+      <div className="relative z-10 p-5 pt-4">
 
         {/* ══ JONLI MONITORING ══ */}
         {tab === 'live' && (

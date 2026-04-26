@@ -151,8 +151,17 @@
    (bypasses Tailwind v4 arbitrary-value scan)
    ═══════════════════════════════════════════ */
 .operator-main-grid {
-  grid-template-columns: 280px 1fr 256px;
+  grid-template-columns: 360px 1fr 340px;
 }
+
+/* ═══════════════════════════════════════════
+   Wiggle animation — ringing phone CTA
+   ═══════════════════════════════════════════ */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-12deg); }
+  50%      { transform: rotate(12deg); }
+}
+.animate-wiggle { animation: wiggle 0.45s ease-in-out infinite; }
 
 /* ═══════════════════════════════════════════
    Leaflet — dark theme overrides

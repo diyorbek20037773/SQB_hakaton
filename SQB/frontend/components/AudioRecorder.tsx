@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { Mic, MicOff } from 'lucide-react';
+import { useRef, useEffect, useCallback } from 'react';
 
 interface AudioRecorderProps {
   onTranscript: (text: string) => void;
@@ -37,24 +36,28 @@ declare global {
 }
 
 export function AudioRecorder({ onTranscript, onInterimTranscript, isActive }: AudioRecorderProps) {
-  const [isRecording, setIsRecording] = useState(false);
-  const [supported, setSupported] = useState(false);
   const recognitionRef = useRef<ISpeechRecognition | null>(null);
+  const onTranscriptRef = useRef(onTranscript);
+  const onInterimRef = useRef(onInterimTranscript);
 
-  useEffect(() => {
-    const SpeechRecognitionAPI =
-      typeof window !== 'undefined'
-        ? window.SpeechRecognition || window.webkitSpeechRecognition
-        : null;
-    setSupported(!!SpeechRecognitionAPI);
+  useEffect(() => { onTranscriptRef.current = onTranscript; }, [onTranscript]);
+  useEffect(() => { onInterimRef.current = onInterimTranscript; }, [onInterimTranscript]);
+
+  const stop = useCallback(() => {
+    try { recognitionRef.current?.stop(); } catch { /* noop */ }
+    recognitionRef.current = null;
   }, []);
 
-  const startRecording = useCallback(() => {
-    const SpeechRecognitionAPI =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognitionAPI) return;
+  const start = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    const API = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!API) {
+      console.warn('SpeechRecognition not supported in this browser');
+      return;
+    }
+    if (recognitionRef.current) return;
 
-    const recognition = new SpeechRecognitionAPI();
+    const recognition = new API();
     recognition.lang = 'uz-UZ';
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -66,90 +69,40 @@ export function AudioRecorder({ onTranscript, onInterimTranscript, isActive }: A
         if (result.isFinal) {
           const text = result[0].transcript.trim();
           const hasWord = /[a-zA-ZА-яёҒҳқЎўҚ]{2,}/u.test(text);
-          if (hasWord) onTranscript(text);
-          onInterimTranscript?.('');
+          if (hasWord) onTranscriptRef.current(text);
+          onInterimRef.current?.('');
         } else {
           interim += result[0].transcript;
         }
       }
-      if (interim) onInterimTranscript?.(interim);
+      if (interim) onInterimRef.current?.(interim);
     };
 
-    recognition.onerror = () => {
-      setIsRecording(false);
-    };
-
+    recognition.onerror = () => { recognitionRef.current = null; };
     recognition.onend = () => {
-      setIsRecording(false);
+      // Auto-restart if still meant to be active (prevents API silence drop)
+      if (recognitionRef.current === recognition) {
+        recognitionRef.current = null;
+      }
     };
 
-    recognition.start();
-    recognitionRef.current = recognition;
-    setIsRecording(true);
-  }, [onTranscript]);
-
-  const stopRecording = useCallback(() => {
-    recognitionRef.current?.stop();
-    recognitionRef.current = null;
-    setIsRecording(false);
+    try {
+      recognition.start();
+      recognitionRef.current = recognition;
+    } catch (e) {
+      console.error('Recognition start failed:', e);
+    }
   }, []);
 
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  };
-
+  // Auto-start when call goes active, stop when ends
   useEffect(() => {
-    if (!isActive) stopRecording();
-    return () => { stopRecording(); };
-  }, [isActive, stopRecording]);
+    if (isActive) {
+      start();
+    } else {
+      stop();
+    }
+    return () => { stop(); };
+  }, [isActive, start, stop]);
 
-  if (!isActive) return null;
-
-  return (
-    <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700">
-      {/* Recording indicator */}
-      {isRecording ? (
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          <span className="text-red-400 text-xs font-medium">Tinglanmoqda...</span>
-        </span>
-      ) : (
-        <span className="text-slate-500 text-xs">Mijoz ovozini tinglash uchun bosing</span>
-      )}
-
-      <div className="flex-1" />
-
-      {/* Record button */}
-      {supported ? (
-        <button
-          onClick={toggleRecording}
-          className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
-            isRecording
-              ? 'bg-red-600 hover:bg-red-700 text-white'
-              : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
-        >
-          {isRecording ? (
-            <>
-              <MicOff className="w-4 h-4" />
-              To'xtatish
-            </>
-          ) : (
-            <>
-              <Mic className="w-4 h-4" />
-              Yozish
-            </>
-          )}
-        </button>
-      ) : (
-        <span className="text-slate-500 text-xs">
-          Brauzer qo&apos;llab-quvvatlamaydi
-        </span>
-      )}
-    </div>
-  );
+  return null;
 }
