@@ -241,9 +241,11 @@ export default function OperatorPage() {
   const lastActivityRef = useRef<number>(Date.now());
   const silenceFiredRef = useRef<boolean>(false);
   const transcriptRef = useRef<TranscriptLine[]>([]);
+  const isStreamingRef = useRef<boolean>(false);
+  const sendTranscriptRef = useRef<(t: string) => void>(() => {});
   const [silenceMs, setSilenceMs] = useState(0);
 
-  const SILENCE_THRESHOLD_MS = 1500;
+  const SILENCE_THRESHOLD_MS = 3000;
 
   const { analysis: wsAnalysis, streamingSuggestion, isStreaming, sendTranscript } = useCallStream(callId);
 
@@ -277,31 +279,38 @@ export default function OperatorPage() {
     transcriptRef.current = transcript;
   }, [transcript, interimText]);
 
-  // Silence detector — if customer hasn't spoken for SILENCE_THRESHOLD_MS, prompt AI for a conversation starter
+  // Keep refs in sync (so silence interval doesn't recreate on every change)
+  useEffect(() => { isStreamingRef.current = isStreaming; }, [isStreaming]);
+  useEffect(() => { sendTranscriptRef.current = sendTranscript; }, [sendTranscript]);
+
+  // Silence detector — fires ONCE per silence period; resets only on real (final) customer speech.
+  // Deps: only callActive — interval persists across streaming/sendTranscript changes via refs.
   useEffect(() => {
     if (!callActive) {
       silenceFiredRef.current = false;
       lastActivityRef.current = Date.now();
-      const t = setTimeout(() => setSilenceMs(0), 0);
-      return () => clearTimeout(t);
+      setSilenceMs(0);
+      return;
     }
     lastActivityRef.current = Date.now();
     silenceFiredRef.current = false;
     const id = setInterval(() => {
       const elapsed = Date.now() - lastActivityRef.current;
       setSilenceMs(elapsed);
-      if (elapsed > SILENCE_THRESHOLD_MS && !silenceFiredRef.current && !isStreaming) {
-        silenceFiredRef.current = true;
+      // Auto-clear stale interim ("Mijoz gapirmoqda...") if no fresh interim updates for 1.5s+
+      if (elapsed > 1500) setInterimText('');
+      if (elapsed > SILENCE_THRESHOLD_MS && !silenceFiredRef.current && !isStreamingRef.current) {
+        silenceFiredRef.current = true; // Locked until next real customer speech resets it
         const customerLines = transcriptRef.current.filter(t => t.speaker === 'customer');
         const lastLine = customerLines.slice(-1)[0]?.text || '';
         const silencePrompt = lastLine
           ? `[SUKUNAT_HOLATI] Mijoz oxirgi marta dedi: "${lastLine}". Hozir ${(elapsed / 1000).toFixed(1)} soniya jim. Operator suhbatni davom ettirish uchun yumshoq turtki yoki ochuvchi savol bersin.`
           : `[SUKUNAT_HOLATI] Mijoz hech narsa demadi va jim turibdi (${(elapsed / 1000).toFixed(1)} s). Operator mijozga ochiq savol berib, suhbatni boshlasin.`;
-        sendTranscript(silencePrompt);
+        sendTranscriptRef.current(silencePrompt);
       }
-    }, 250);
+    }, 400);
     return () => clearInterval(id);
-  }, [callActive, isStreaming, sendTranscript]);
+  }, [callActive]);
 
   const addLine = useCallback((speaker: 'operator' | 'customer', text: string) => {
     if (!text?.trim()) return;
@@ -362,9 +371,10 @@ export default function OperatorPage() {
   }, [addLine, sendTranscript]);
 
   const handleInterimTranscript = useCallback((text: string) => {
+    // Update timestamp so silence indicator reflects ongoing speech,
+    // but DON'T reset silenceFiredRef — only real (final) transcript should re-arm the trigger.
     if (text) {
       lastActivityRef.current = Date.now();
-      silenceFiredRef.current = false;
     }
     setInterimText(text);
   }, []);
@@ -417,8 +427,7 @@ export default function OperatorPage() {
 
         {/* Brand */}
         <div className="flex-shrink-0 w-44">
-          <span className="text-[10px] uppercase tracking-widest font-bold text-slate-500 block mb-0.5">SQB · ASTA</span>
-          <h1 className="text-sm font-semibold text-white leading-tight">Operator Kopilot</h1>
+          <h1 className="text-base font-bold text-white leading-tight">Yulduz AI</h1>
         </div>
 
         {/* Search */}
@@ -832,37 +841,35 @@ export default function OperatorPage() {
 
           {/* Transcript list */}
           <div className="flex-1 overflow-y-auto min-h-0 p-3 space-y-2">
-            {/* AI-predicted customer questions — tailored to selected customer profile */}
-            {callActive && c.predicted_questions.length > 0 && (
-              <div className="bg-gradient-to-br from-indigo-500/10 to-slate-900/40 border border-indigo-500/30 rounded-xl p-3 mb-2">
-                <p className="text-[10px] uppercase tracking-[1.5px] font-bold text-indigo-300 mb-2 flex items-center gap-1.5">
-                  <Lightbulb className="w-3 h-3" /> Mijoz so&apos;rashi mumkin
-                  <span className="text-slate-500 font-normal normal-case tracking-normal">· bosing AI tavsiyasi tayyor</span>
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {c.predicted_questions.map(q => (
-                    <button
-                      key={q.short}
-                      onClick={() => handleDemoQuestion(q.text)}
-                      className="text-[10px] px-2.5 py-1.5 bg-slate-800/60 hover:bg-indigo-500/25 hover:border-indigo-400/60 border border-slate-700/60 text-slate-200 hover:text-white rounded-full transition-all flex items-center gap-1.5 font-medium"
-                      title={q.text}
-                    >
-                      <span>{q.icon}</span>
-                      <span>{q.short}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {customerLines.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full text-center py-12">
+              <div className="flex flex-col items-center justify-center h-full text-center py-10 px-3">
                 <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
                   <Mic className="w-5 h-5 text-slate-600" />
                 </div>
-                <p className="text-sm text-slate-500 font-medium">
+                <p className="text-sm text-slate-500 font-medium mb-6">
                   {callActive ? 'Mijoz hali gapirmagan...' : "Qo'ng'iroqni boshlang"}
                 </p>
+
+                {/* Subtle demo hints — visible when chat empty, fade away when conversation starts */}
+                <div className="w-full max-w-[260px] mt-2 opacity-70">
+                  <p className="text-[9px] uppercase tracking-[1.5px] text-slate-600 mb-2">
+                    Misol uchun sinab ko&apos;ring
+                  </p>
+                  <div className="flex flex-col gap-1.5">
+                    {c.predicted_questions.slice(0, 3).map(q => (
+                      <button
+                        key={q.short}
+                        onClick={() => handleDemoQuestion(q.text)}
+                        disabled={!callActive}
+                        className="text-[10px] text-left px-3 py-2 bg-slate-900/40 hover:bg-indigo-500/15 hover:border-indigo-500/40 border border-slate-800/80 text-slate-400 hover:text-slate-200 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-start gap-2 leading-snug"
+                        title={!callActive ? "Avval qo'ng'iroqni boshlang" : q.text}
+                      >
+                        <span className="flex-shrink-0">{q.icon}</span>
+                        <span className="italic">&ldquo;{q.text.length > 50 ? q.text.slice(0, 50) + '…' : q.text}&rdquo;</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
 

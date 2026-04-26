@@ -21,7 +21,7 @@ export function Sidebar() {
       <div className="dark:hidden flex flex-col h-full bg-white border-r border-stone-200">
         {/* Logo */}
         <div className="p-5 border-b border-stone-200">
-          <p className="text-[10px] uppercase tracking-wider font-medium text-zinc-400 mb-2">SQB · v2.4</p>
+          <p className="text-[10px] uppercase tracking-wider font-medium text-zinc-400 mb-2">v1.0</p>
           <div className="flex items-center gap-2.5">
             <div className="w-[30px] h-[30px] bg-zinc-950 rounded-md flex items-center justify-center flex-shrink-0">
               <Zap className="w-3.5 h-3.5 text-white" />

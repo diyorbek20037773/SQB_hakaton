@@ -1,8 +1,8 @@
 <div align="center">
 
-# ⚡Yulduz AI & Telephony Assistant
+# ⚡ Yulduz AI — AI Sales & Telephony Assistant
 
-### SQB bank call-center operatorlari uchun real-time AI yordamchi
+### Bank call-center operatorlari uchun real-time AI copilot
 
 <br />
 
@@ -38,7 +38,7 @@
 
 ## 📖 Loyiha haqida
 
-**Yulduz AI** — bu SQB bank operatorlari mijoz bilan jonli telefon suhbati paytida real vaqtda AI yordami beradigan **copilot** tizimi. Operator gapirayotgan paytda tizim:
+**Yulduz AI** — bank operatorlari mijoz bilan jonli telefon suhbati paytida real vaqtda AI yordami beradigan **copilot** tizimi. Operator gapirayotgan paytda tizim:
 
 - 🎙️ Mijoz nutqini transkripsiya qiladi (uz-UZ)
 - 🧠 Suhbat kontekstini AI orqali tahlil qiladi

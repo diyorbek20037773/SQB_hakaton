@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Wifi, WifiOff } from 'lucide-react';
 
 const PAGE_TITLES: Record<string, string> = {
-  '/operator': 'Operator Kopilot',
+  '/operator': 'Yulduz AI',
   '/supervisor': 'Supervisor Panel',
   '/analytics': 'Analitika',
   '/simulator': 'Qo\'ng\'iroq Simulatori',
