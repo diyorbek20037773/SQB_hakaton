@@ -39,7 +39,7 @@ def _generate_sync(system_prompt: str, user_prompt: str) -> str:
             {"role": "user", "content": user_prompt},
         ],
         response_format={"type": "json_object"},
-        temperature=0.3,
+        temperature=0.55,
         max_tokens=1024,
     )
     return response.choices[0].message.content
@@ -83,7 +83,10 @@ def _apply_analysis_defaults(result: dict) -> dict:
     result.setdefault("sentiment_score", 0.0)
     result.setdefault("compliance_alerts", [])
     result.setdefault("detected_objection", None)
-    result.setdefault("suggested_response", "Davom eting.")
+    result.setdefault("suggested_response", "Mijozni diqqat bilan tinglang va aniqroq tushuntirishini so'rang.")
+    # Replace blank/whitespace-only suggestions with a helpful default (don't go silent)
+    if not (result.get("suggested_response") or "").strip():
+        result["suggested_response"] = "Mijozdan savolini biroz aniqlashtirishini so'rang — qanday yordam kerakligini aniq tushunish uchun."
     result.setdefault("nbo", None)
     result.setdefault("topics", [])
     result.setdefault("kyc_checklist_update", {
@@ -100,7 +103,7 @@ def _build_analysis_prompt(
     products: list,
     compliance_rules: dict,
 ) -> str:
-    return f"""Bank operatoriga qo'ng'iroq paytida yordam ber.
+    return f"""Bank operatoriga qo'ng'iroq paytida real-time yordam ber.
 
 SUHBAT SEGMENTI:
 {transcript_segment}
@@ -119,10 +122,14 @@ MAVJUD MAHSULOTLAR:
 
 TAQIQLANGAN IBORALAR: {', '.join(compliance_rules.get('forbidden_phrases', []))}
 
-MUHIM QOIDALAR:
-1. Agar mijoz savoli bank xizmatlari bilan bog'liq bo'lmasa — suggested_response bo'sh qator, nbo null.
-2. Faqat aniq bank mahsuloti kerak bo'lganda nbo qo'y.
-3. Tavsiya faqat suhbat segmentiga asoslansin.
+YO'RIQNOMA:
+1. **Har qanday holatda foydali tavsiya ber** — suggested_response hech qachon bo'sh bo'lmasin.
+2. Mijoz nima desa ham — operator unga professional, samimiy va aniq javob bera oladigan iborani tavsiya qil.
+3. Agar mavzu noaniq bo'lsa — operator mijozdan aniqlik kiritishni so'rashi uchun savol shakllantir.
+4. Bank mahsuloti tavsiya etish to'g'ri kelsa — nbo to'ldir (mijoz segment va daromadiga mos).
+5. Mijoz e'tirozi bo'lsa — uni tan ol, keyin yumshoq qarshi dalil ber (qarshi-qadam texnikasi).
+6. Javob qisqa, jonli, O'zbek tilida (1-3 jumla). Operator to'g'ridan-to'g'ri o'qiy oladigan ibora bo'lsin.
+7. **[SUKUNAT_HOLATI] belgisi bo'lsa** — mijoz jim turibdi. Operator suhbatni davom ettirish uchun yumshoq, samimiy ochuvchi savol yoki turtki bersin (masalan: "Yana qanday savollaringiz bor?", "Sizga qanday yordam bera olamiz?", "Boshqa qiziqtirgan masala bormi?"). Sentiment "neutral", nbo null.
 
 JSON formatida javob ber:
 {{
@@ -130,7 +137,7 @@ JSON formatida javob ber:
   "sentiment_score": -1..1,
   "compliance_alerts": [{{"type": "str", "description": "str", "severity": "low|medium|high|critical"}}],
   "detected_objection": {{"type": "high_interest|need_to_think|no_money|dont_trust|other", "customer_said": "str"}} | null,
-  "suggested_response": "Operator uchun tavsiya (O'zbek, 1-2 jumla). Bank bilan bog'liq bo'lmasa — bo'sh.",
+  "suggested_response": "Operator to'g'ridan-to'g'ri aytishi uchun tavsiya (O'zbek, 1-3 jumla). HECH QACHON bo'sh bo'lmasin — kerak bo'lsa savol shakllantir.",
   "nbo": {{"product_id": "str", "product_name": "str", "reason": "str", "confidence": 0..1}} | null,
   "topics": ["str"],
   "kyc_checklist_update": {{"income_verified": bool, "purpose_stated": bool, "pep_checked": bool}}
@@ -190,7 +197,7 @@ async def analyze_transcript_segment_streaming(
                     {"role": "system", "content": _SYSTEM_PROMPT},
                     {"role": "user", "content": user_prompt},
                 ],
-                temperature=0.3,
+                temperature=0.55,
                 max_tokens=1024,
                 stream=True,
             )

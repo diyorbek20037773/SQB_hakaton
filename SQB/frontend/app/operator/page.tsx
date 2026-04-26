@@ -31,6 +31,7 @@ interface CustomerProfile {
   risk_flags: { label: string; severity: 'critical' | 'warning' | 'info' }[];
   cross_sell_hint: string | null;
   history_note: string;
+  predicted_questions: { icon: string; short: string; text: string }[];
 }
 
 // ─── Customers ────────────────────────────────────────────────────────────────
@@ -56,6 +57,12 @@ const CUSTOMERS: CustomerProfile[] = [
     risk_flags: [],
     cross_sell_hint: 'VIP Ipoteka: kredit bali yetarli, daromad mos. 87% ehtimol.',
     history_note: '3 oy avval kredit rad etilgan, lekin bali yaxshilangan.',
+    predicted_questions: [
+      { icon: '🏠', short: 'Ipoteka qayta',     text: "3 oy oldin ipoteka rad etilgan edi, hozir kredit balim yaxshilandi. Qayta murojaat qilsam bo'ladimi?" },
+      { icon: '📊', short: 'Foiz hozir',        text: "Hozirgi ipoteka foiz stavkalari qanday? VIP klient sifatida chegirma bormi?" },
+      { icon: '💎', short: 'VIP imtiyoz',       text: "VIP klient sifatida menga qanday qo'shimcha imtiyozlar beriladi?" },
+      { icon: '💼', short: 'Investitsiya',       text: "Bo'sh aktivlarimni investitsiya qilmoqchiman, qanday mahsulotlaringiz bor?" },
+    ],
   },
   {
     id: 2,
@@ -79,6 +86,12 @@ const CUSTOMERS: CustomerProfile[] = [
     ],
     cross_sell_hint: "Premium Depozit 18% yillik + Hayot sug'urtasi. Daromad mos.",
     history_note: "Rus tilida gaplashadi. KYC yangilash majburiy.",
+    predicted_questions: [
+      { icon: '💰', short: 'Depozit foiz',       text: "Какие ставки по депозитам сейчас? Хочу открыть депозит на 12 месяцев." },
+      { icon: '🆔', short: 'KYC yangilash',     text: "KYC ma'lumotlarimni qanday yangilash mumkin? Office'ga borish kerakmi?" },
+      { icon: '💵', short: 'USD depozit',        text: "Можно открыть депозит в долларах? Какие проценты?" },
+      { icon: '🛡️', short: 'Sug\'urta',          text: "Hayot sug'urtasi bilan depozit kombinatsiyasi haqida ma'lumot bering" },
+    ],
   },
   {
     id: 3,
@@ -106,6 +119,12 @@ const CUSTOMERS: CustomerProfile[] = [
     ],
     cross_sell_hint: null,
     history_note: "Oxirgi 6 qo'ng'iroqning 4 tasi shikoyat. Kredit taklif qilmang.",
+    predicted_questions: [
+      { icon: '🚫', short: 'Karta nega',         text: "Mening kartam nima uchun bloklangan? Hech qanday qoidabuzarlik qilmaganman!" },
+      { icon: '⚡', short: 'Tez ochish',         text: "Kartamni tezda ochib bera olasizmi? Pulim qolib ketdi, juda kerak." },
+      { icon: '😡', short: 'Shikoyat',           text: "Bu xizmat juda yomon. Boshqa bankka ko'chmoqchiman, qanday qilinadi?" },
+      { icon: '💳', short: 'Yangi karta',        text: "Bloklangan kartani qaytmasdan, yangi karta ololaman?" },
+    ],
   },
   {
     id: 4,
@@ -130,6 +149,12 @@ const CUSTOMERS: CustomerProfile[] = [
     ],
     cross_sell_hint: 'Biznes depozit yoki VIP investitsiya mahsuloti. Aktivlari katta.',
     history_note: "Doimiy mijoz, 12 ta qo'ng'iroq. Yuqori aktivlar. Karta taklif qilmang.",
+    predicted_questions: [
+      { icon: '💸', short: '500M o\'tkazma',     text: "500 million so'mni boshqa hisobimga o'tkazmoqchiman, mumkinmi va qanday tartibda?" },
+      { icon: '⏱️', short: 'Necha kunda',        text: "Bu o'tkazma necha kunda yetib boradi va komissiya qancha?" },
+      { icon: '🏢', short: 'Biznes hisob',       text: "Yangi biznes hisob ochmoqchiman, qanday hujjatlar kerak?" },
+      { icon: '💎', short: 'VIP investitsiya',   text: "Bo'sh aktivlarim uchun yuqori foizli investitsiya mahsuloti bormi?" },
+    ],
   },
   {
     id: 5,
@@ -153,6 +178,12 @@ const CUSTOMERS: CustomerProfile[] = [
     ],
     cross_sell_hint: "Debet karta + internet banking (boshlang'ich mahsulot). Kredit emas.",
     history_note: 'Yangi mijoz. Kredit berish xavfli. Alternativ taklif qiling.',
+    predicted_questions: [
+      { icon: '💰', short: 'Kredit miqdor',     text: "Iste'mol krediti olmoqchiman. Mening daromadim 3.8M, qancha kredit bera olasizlar?" },
+      { icon: '📊', short: 'Foiz qancha',        text: "Foiz stavka qancha bo'ladi va necha oyga olishim mumkin?" },
+      { icon: '📋', short: 'Qanday hujjat',     text: "Birinchi marta bankka murojaat qilyapman, qanday hujjatlar kerak?" },
+      { icon: '🎴', short: 'Karta',              text: "Hech qachon bank karta olmaganman, qanday tartibda olish mumkin?" },
+    ],
   },
 ];
 
@@ -186,7 +217,7 @@ function segmentBadge(seg: string) {
   return m[seg] ?? m.Mass;
 }
 
-const WAVE = [3,5,8,4,9,6,11,7,5,10,8,6,4,9,7,5,8,11,6,4,9,7,5,8,6,10,4,7,9,5,8,6];
+const WAVE = [3,5,8,4,9,6,11,7,5,10,8,6,4,9,7,5,8,11,6,4,9,7,5,8,11,6,4,9,7,5,8,6];
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function OperatorPage() {
@@ -207,6 +238,12 @@ export default function OperatorPage() {
   const transcriptEndRef = useRef<HTMLDivElement>(null);
   const aiDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const accumulatedSpeechRef = useRef('');
+  const lastActivityRef = useRef<number>(Date.now());
+  const silenceFiredRef = useRef<boolean>(false);
+  const transcriptRef = useRef<TranscriptLine[]>([]);
+  const [silenceMs, setSilenceMs] = useState(0);
+
+  const SILENCE_THRESHOLD_MS = 1500;
 
   const { analysis: wsAnalysis, streamingSuggestion, isStreaming, sendTranscript } = useCallStream(callId);
 
@@ -237,7 +274,34 @@ export default function OperatorPage() {
 
   useEffect(() => {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    transcriptRef.current = transcript;
   }, [transcript, interimText]);
+
+  // Silence detector — if customer hasn't spoken for SILENCE_THRESHOLD_MS, prompt AI for a conversation starter
+  useEffect(() => {
+    if (!callActive) {
+      silenceFiredRef.current = false;
+      lastActivityRef.current = Date.now();
+      const t = setTimeout(() => setSilenceMs(0), 0);
+      return () => clearTimeout(t);
+    }
+    lastActivityRef.current = Date.now();
+    silenceFiredRef.current = false;
+    const id = setInterval(() => {
+      const elapsed = Date.now() - lastActivityRef.current;
+      setSilenceMs(elapsed);
+      if (elapsed > SILENCE_THRESHOLD_MS && !silenceFiredRef.current && !isStreaming) {
+        silenceFiredRef.current = true;
+        const customerLines = transcriptRef.current.filter(t => t.speaker === 'customer');
+        const lastLine = customerLines.slice(-1)[0]?.text || '';
+        const silencePrompt = lastLine
+          ? `[SUKUNAT_HOLATI] Mijoz oxirgi marta dedi: "${lastLine}". Hozir ${(elapsed / 1000).toFixed(1)} soniya jim. Operator suhbatni davom ettirish uchun yumshoq turtki yoki ochuvchi savol bersin.`
+          : `[SUKUNAT_HOLATI] Mijoz hech narsa demadi va jim turibdi (${(elapsed / 1000).toFixed(1)} s). Operator mijozga ochiq savol berib, suhbatni boshlasin.`;
+        sendTranscript(silencePrompt);
+      }
+    }, 250);
+    return () => clearInterval(id);
+  }, [callActive, isStreaming, sendTranscript]);
 
   const addLine = useCallback((speaker: 'operator' | 'customer', text: string) => {
     if (!text?.trim()) return;
@@ -283,6 +347,8 @@ export default function OperatorPage() {
   const TRIVIAL = /^(salom|assalomu alaykum|alaykum assalom|qalaysiz|qalaysan|xayr|rahmat|ok|ha|yo'q|yoq|barakalla|tushundim|davom eting|albatta|kerak|yaxshi)\b/i;
 
   const handleTranscript = useCallback((text: string) => {
+    lastActivityRef.current = Date.now();
+    silenceFiredRef.current = false;
     setInterimText('');
     addLine('customer', text);
     accumulatedSpeechRef.current += ' ' + text.trim();
@@ -296,8 +362,23 @@ export default function OperatorPage() {
   }, [addLine, sendTranscript]);
 
   const handleInterimTranscript = useCallback((text: string) => {
+    if (text) {
+      lastActivityRef.current = Date.now();
+      silenceFiredRef.current = false;
+    }
     setInterimText(text);
   }, []);
+
+  // Demo question chip — inject as customer line + immediately send to AI
+  const handleDemoQuestion = useCallback((text: string) => {
+    if (!callActive) return;
+    lastActivityRef.current = Date.now();
+    silenceFiredRef.current = false;
+    addLine('customer', text);
+    if (aiDebounceRef.current) clearTimeout(aiDebounceRef.current);
+    accumulatedSpeechRef.current = '';
+    sendTranscript(text);
+  }, [callActive, addLine, sendTranscript]);
 
   const displayedSuggestion = isStreaming ? streamingSuggestion : (streamingSuggestion || analysis.suggested_response);
   const copyResponse = () => {
@@ -735,7 +816,13 @@ export default function OperatorPage() {
             <span className="text-[10px] bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full">
               {customerLines.length}
             </span>
-            {callActive && (
+            {callActive && silenceMs > SILENCE_THRESHOLD_MS && (
+              <span className="ml-auto flex items-center gap-1 text-[9px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                <span className="w-1 h-1 bg-amber-400 rounded-full animate-pulse" />
+                SUKUNAT · {(silenceMs / 1000).toFixed(1)}s
+              </span>
+            )}
+            {callActive && silenceMs <= SILENCE_THRESHOLD_MS && (
               <span className="ml-auto flex items-center gap-1 text-[9px] font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full">
                 <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
                 JONLI
@@ -745,6 +832,29 @@ export default function OperatorPage() {
 
           {/* Transcript list */}
           <div className="flex-1 overflow-y-auto min-h-0 p-3 space-y-2">
+            {/* AI-predicted customer questions — tailored to selected customer profile */}
+            {callActive && c.predicted_questions.length > 0 && (
+              <div className="bg-gradient-to-br from-indigo-500/10 to-slate-900/40 border border-indigo-500/30 rounded-xl p-3 mb-2">
+                <p className="text-[10px] uppercase tracking-[1.5px] font-bold text-indigo-300 mb-2 flex items-center gap-1.5">
+                  <Lightbulb className="w-3 h-3" /> Mijoz so&apos;rashi mumkin
+                  <span className="text-slate-500 font-normal normal-case tracking-normal">· bosing AI tavsiyasi tayyor</span>
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {c.predicted_questions.map(q => (
+                    <button
+                      key={q.short}
+                      onClick={() => handleDemoQuestion(q.text)}
+                      className="text-[10px] px-2.5 py-1.5 bg-slate-800/60 hover:bg-indigo-500/25 hover:border-indigo-400/60 border border-slate-700/60 text-slate-200 hover:text-white rounded-full transition-all flex items-center gap-1.5 font-medium"
+                      title={q.text}
+                    >
+                      <span>{q.icon}</span>
+                      <span>{q.short}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {customerLines.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center py-12">
                 <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
