@@ -14,15 +14,11 @@
 
 ### 👉 [**celebrated-analysis-production-7353.up.railway.app/operator**](https://celebrated-analysis-production-7353.up.railway.app/operator) 👈
 
-<sub>Brauzerda ochib, darhol sinab ko'ring — o'rnatish kerak emas</sub>
-
 <br />
 
 > ⚠️ **Muhim:** Ilovani **Google Chrome** brauzerida ishlating.
 
 <br />
-
-<sub>📦 Manba kodi: [github.com/diyorbek20037773/SQB_hakaton](https://github.com/diyorbek20037773/SQB_hakaton)</sub>
 
 <br />
 
