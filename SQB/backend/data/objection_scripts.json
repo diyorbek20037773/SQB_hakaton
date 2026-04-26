@@ -1,0 +1,60 @@
+{
+  "high_interest": {
+    "keywords": ["foiz yuqori", "qimmat", "interest too high", "ko'p foiz", "katta foiz", "narxi yuqori", "expensive"],
+    "responses": [
+      "Bizning foiz stavkamiz bozordagi eng raqobatbardosh stavkalardan biri. Bundan tashqari, siz uchun maxsus chegirma imkoniyatimiz mavjud.",
+      "Foizni to'liq taqqoslasangiz, bizda qo'shimcha xizmatlar va imtiyozlar ham bor - bu sizga iqtisodiy jihatdan qulayroq bo'ladi.",
+      "Tushunaman, foiz muhim omil. Lekin bizning mahsulotimiz bilan birga keladigan bonuslar va cashback hisobga olsangiz, aslida qimmat emas.",
+      "Aynan siz uchun loyihalashtirilgan maxsus taklifimiz bor - birozgina hujjatlar bilan foizni pasaytirishimiz mumkin."
+    ],
+    "escalation_tip": "Agar mijoz qat'iy rad etsa, muddatini uzaytirish yoki boshlang'ich to'lovni o'zgartirish orqali oylik to'lovni kamaytirish taklif qiling."
+  },
+  "need_to_think": {
+    "keywords": ["o'ylab ko'raman", "keyinroq", "hozir emas", "need to think", "later", "vaqt kerak", "shoshilmayin"],
+    "responses": [
+      "Albatta, muhim qaror uchun vaqt kerak. Lekin ushbu taklif faqat shu oy uchun amal qiladi - keyingi oy shartlar o'zgarishi mumkin.",
+      "Tushunaman. Siz uchun barcha ma'lumotlarni yozib qo'yayin - uyda o'ylab ko'rib, qaror qabul qilsangiz bo'ladi.",
+      "Yaxshi, mulohaza qiling. Faqat bitta savol: siz uchun eng muhim omil nima - foiz, muddat yoki oylik to'lov miqdori?",
+      "Hech muammo yo'q. Lekin siz bilan bog'lanishim uchun qulay vaqtni belgilaylik - 2-3 kun ichida qayta gaplashamizmi?"
+    ],
+    "escalation_tip": "Mijozning asosiy qaror qabul qilishiga to'sqinlik qiluvchi omilni aniqlang va unga e'tibor qarating."
+  },
+  "no_money": {
+    "keywords": ["pul yo'q", "mablag' yo'q", "afford qila olmayman", "no money", "qo'limda yo'q", "imkonim yo'q", "qiyin"],
+    "responses": [
+      "Tushunaman, hozir pul masalasi qiyin bo'lishi mumkin. Aynan shu sababli bizning kredit mahsulotimiz sizga yordam beradi.",
+      "Boshlang'ich to'lov minimal - faqat 10% kerak. Qolgan qismini oylik qulay to'lovlarga bo'lib to'laysiz.",
+      "Bizda maxsus to'lov rejasi bor - birinchi 3 oy faqat foiz to'laysiz, asosiy qarz keyin boshlanadi.",
+      "Siz hozir to'lamaydigan mablag' uchun kelajakda qiymatli asset sotib olasiz. Bu investitsiya deb qarang."
+    ],
+    "escalation_tip": "Mijozning moliyaviy holatini to'liqroq baholang va unga mos minimal mahsulot taklif qiling."
+  },
+  "dont_trust": {
+    "keywords": ["ishonmayman", "shubhali", "don't trust", "firibgar", "aldov", "yashirin shartlar", "skeptical", "yashirin"],
+    "responses": [
+      "Tushunaman sizning shubhangizni. SQB - O'zbekistonning eng ishonchli davlat banklaridan biri, 30 yildan ortiq tajribaga ega.",
+      "Barcha shartlar shartnomada ochiq yoziladi. Siz shartnomani imzolashdan oldin to'liq o'qib chiqishingiz mumkin.",
+      "Qo'shimcha kafolat uchun Central bank litsenziyamizni ko'rishingiz mumkin. Biz to'liq nazorat ostidamiz.",
+      "Mijozlarimizning 95% dan ortiq qoniqish darajasi bor. Istalgan vaqt bank filialimizga kelib, hamma narsani shaxsan tekshirishingiz mumkin."
+    ],
+    "escalation_tip": "Mijozni bank filialiga taklif qiling yoki rahbarga ulang."
+  },
+  "already_have": {
+    "keywords": ["boshqa bankda bor", "allaqachon bor", "kerak emas", "already have", "boshqa joyi bor"],
+    "responses": [
+      "Juda yaxshi! Ko'p mijozlarimiz bir nechta bankda xizmat oladi. Bizning mahsulotimiz sizning mavjud xizmatlaringizni to'ldirishi mumkin.",
+      "Qiziq, qaysi bankda? Biz ular bilan taqqoslaganda qanday afzalliklarimiz borligini aytib bera olamam.",
+      "Mavjud mahsulotingizni refinansirovka qilish imkoniyatini ko'rib chiqaylik - ehtimol foiz stavkangizni pasaytirsak bo'lar."
+    ],
+    "escalation_tip": "Raqib mahsulot bilan solishtiring va bizning ustunliklarimizni ko'rsating."
+  },
+  "technical_issues": {
+    "keywords": ["ilovada xato", "ishlamayapti", "xato", "muammo", "error", "bug", "texnik"],
+    "responses": [
+      "Uzr, texnik muammo uchun. Men hoziroq texnik xizmat bo'limiga ulaylik.",
+      "Tushunaman, bu noqulay. Muammoni hal qilish uchun ticketingizni ochib qo'yamiz va 24 soat ichida javob beramiz.",
+      "Ilova muammosi bo'lsa, web-sayt orqali ham amalga oshirish mumkin. Yordam beraymi?"
+    ],
+    "escalation_tip": "Texnik muammolarni IT qo'llab-quvvatlash bo'limiga o'tkazing."
+  }
+}

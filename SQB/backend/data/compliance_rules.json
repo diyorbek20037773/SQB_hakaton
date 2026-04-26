@@ -1,0 +1,84 @@
+{
+  "kyc_checklist": [
+    {
+      "id": "income_source",
+      "question": "Daromad manbaini so'rash",
+      "description": "Mijozning daromad manbai aniqlanishi kerak (ish joyi, biznes, pensiya va h.k.)",
+      "required": true,
+      "trigger_keywords": ["maosh", "ish", "daromad", "kirim", "mablag' qayerdan"]
+    },
+    {
+      "id": "fund_purpose",
+      "question": "Mablag' maqsadini aniqlash",
+      "description": "Kredit yoki depozit maqsadi aniq ko'rsatilishi kerak",
+      "required": true,
+      "trigger_keywords": ["maqsad", "nima uchun", "kredit nimaga", "qayerda ishlatasan"]
+    },
+    {
+      "id": "pep_check",
+      "question": "PEP (siyosiy ta'sirli shaxs) tekshiruvi",
+      "description": "Mijoz siyosiy ta'sirli shaxs yoki uning yaqinlari emasligini tekshirish",
+      "required": true,
+      "trigger_keywords": ["davlat xizmatida", "xodim", "vazirlik", "hokimiyat"]
+    },
+    {
+      "id": "beneficial_owner",
+      "question": "Benefisiar egasini aniqlash",
+      "description": "Yuridik shaxslar uchun - haqiqiy foyda oluvchini aniqlash",
+      "required": false,
+      "trigger_keywords": ["kompaniya", "korxona", "direktori", "egasi"]
+    },
+    {
+      "id": "address_verify",
+      "question": "Yashash manzilini tasdiqlash",
+      "description": "Mijozning hozirgi yashash manzilini tasdiqlash",
+      "required": true,
+      "trigger_keywords": ["manzil", "qayerda yashaysan", "propiska", "ro'yxat"]
+    },
+    {
+      "id": "document_verify",
+      "question": "Hujjatlar to'g'riligini tekshirish",
+      "description": "Pasport va boshqa hujjatlarning amal qilish muddatini tekshirish",
+      "required": true,
+      "trigger_keywords": ["pasport", "ID", "hujjat", "seriya"]
+    }
+  ],
+  "forbidden_phrases": [
+    "kafolatlangan daromad",
+    "kafolatlangan foyda",
+    "100% xavfsiz",
+    "100 foiz xavfsiz",
+    "guaranteed return",
+    "guaranteed profit",
+    "risk yo'q",
+    "yo'qotish bo'lmaydi",
+    "albatta ko'payadi",
+    "100% ishlaydi",
+    "hech qachon zarar ko'rmaysiz",
+    "to'liq kafolat",
+    "bank kafolat beradi",
+    "risk-free",
+    "xavfsiz investitsiya",
+    "foydasi kafolatlangan"
+  ],
+  "aml_thresholds": {
+    "cash_report": 50000000,
+    "suspicious_report": 10000000,
+    "transaction_monitoring": 100000000,
+    "currency_threshold_usd": 5000
+  },
+  "aml_suspicious_patterns": [
+    "Ko'p kichik miqdordagi tranzaksiyalar (smurfing)",
+    "Naqd pul bilan tez-tez operatsiyalar",
+    "Tushunarsiz xorijiy o'tkazmalar",
+    "Odatdan tashqari katta miqdorlar",
+    "PEP bilan bog'liq operatsiyalar"
+  ],
+  "required_disclosures": [
+    "Kredit berish shartlari va foiz stavkalari",
+    "Erta to'lash jarimasi",
+    "Kechiktirilgan to'lov jarimasi",
+    "Sug'urta shartlari",
+    "Ma'lumotlardan foydalanish roziligi"
+  ]
+}
