@@ -129,7 +129,6 @@ YO'RIQNOMA:
 4. Bank mahsuloti tavsiya etish to'g'ri kelsa — nbo to'ldir (mijoz segment va daromadiga mos).
 5. Mijoz e'tirozi bo'lsa — uni tan ol, keyin yumshoq qarshi dalil ber (qarshi-qadam texnikasi).
 6. Javob qisqa, jonli, O'zbek tilida (1-3 jumla). Operator to'g'ridan-to'g'ri o'qiy oladigan ibora bo'lsin.
-7. **[SUKUNAT_HOLATI] belgisi bo'lsa** — mijoz jim turibdi. Operator suhbatni davom ettirish uchun yumshoq, samimiy ochuvchi savol yoki turtki bersin (masalan: "Yana qanday savollaringiz bor?", "Sizga qanday yordam bera olamiz?", "Boshqa qiziqtirgan masala bormi?"). Sentiment "neutral", nbo null.
 
 JSON formatida javob ber:
 {{

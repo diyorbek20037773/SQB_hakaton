@@ -238,14 +238,6 @@ export default function OperatorPage() {
   const transcriptEndRef = useRef<HTMLDivElement>(null);
   const aiDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const accumulatedSpeechRef = useRef('');
-  const lastActivityRef = useRef<number>(Date.now());
-  const silenceFiredRef = useRef<boolean>(false);
-  const transcriptRef = useRef<TranscriptLine[]>([]);
-  const isStreamingRef = useRef<boolean>(false);
-  const sendTranscriptRef = useRef<(t: string) => void>(() => {});
-  const [silenceMs, setSilenceMs] = useState(0);
-
-  const SILENCE_THRESHOLD_MS = 3000;
 
   const { analysis: wsAnalysis, streamingSuggestion, isStreaming, sendTranscript } = useCallStream(callId);
 
@@ -276,41 +268,7 @@ export default function OperatorPage() {
 
   useEffect(() => {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    transcriptRef.current = transcript;
   }, [transcript, interimText]);
-
-  // Keep refs in sync (so silence interval doesn't recreate on every change)
-  useEffect(() => { isStreamingRef.current = isStreaming; }, [isStreaming]);
-  useEffect(() => { sendTranscriptRef.current = sendTranscript; }, [sendTranscript]);
-
-  // Silence detector — fires ONCE per silence period; resets only on real (final) customer speech.
-  // Deps: only callActive — interval persists across streaming/sendTranscript changes via refs.
-  useEffect(() => {
-    if (!callActive) {
-      silenceFiredRef.current = false;
-      lastActivityRef.current = Date.now();
-      setSilenceMs(0);
-      return;
-    }
-    lastActivityRef.current = Date.now();
-    silenceFiredRef.current = false;
-    const id = setInterval(() => {
-      const elapsed = Date.now() - lastActivityRef.current;
-      setSilenceMs(elapsed);
-      // Auto-clear stale interim ("Mijoz gapirmoqda...") if no fresh interim updates for 1.5s+
-      if (elapsed > 1500) setInterimText('');
-      if (elapsed > SILENCE_THRESHOLD_MS && !silenceFiredRef.current && !isStreamingRef.current) {
-        silenceFiredRef.current = true; // Locked until next real customer speech resets it
-        const customerLines = transcriptRef.current.filter(t => t.speaker === 'customer');
-        const lastLine = customerLines.slice(-1)[0]?.text || '';
-        const silencePrompt = lastLine
-          ? `[SUKUNAT_HOLATI] Mijoz oxirgi marta dedi: "${lastLine}". Hozir ${(elapsed / 1000).toFixed(1)} soniya jim. Operator suhbatni davom ettirish uchun yumshoq turtki yoki ochuvchi savol bersin.`
-          : `[SUKUNAT_HOLATI] Mijoz hech narsa demadi va jim turibdi (${(elapsed / 1000).toFixed(1)} s). Operator mijozga ochiq savol berib, suhbatni boshlasin.`;
-        sendTranscriptRef.current(silencePrompt);
-      }
-    }, 400);
-    return () => clearInterval(id);
-  }, [callActive]);
 
   const addLine = useCallback((speaker: 'operator' | 'customer', text: string) => {
     if (!text?.trim()) return;
@@ -356,8 +314,6 @@ export default function OperatorPage() {
   const TRIVIAL = /^(salom|assalomu alaykum|alaykum assalom|qalaysiz|qalaysan|xayr|rahmat|ok|ha|yo'q|yoq|barakalla|tushundim|davom eting|albatta|kerak|yaxshi)\b/i;
 
   const handleTranscript = useCallback((text: string) => {
-    lastActivityRef.current = Date.now();
-    silenceFiredRef.current = false;
     setInterimText('');
     addLine('customer', text);
     accumulatedSpeechRef.current += ' ' + text.trim();
@@ -371,19 +327,12 @@ export default function OperatorPage() {
   }, [addLine, sendTranscript]);
 
   const handleInterimTranscript = useCallback((text: string) => {
-    // Update timestamp so silence indicator reflects ongoing speech,
-    // but DON'T reset silenceFiredRef — only real (final) transcript should re-arm the trigger.
-    if (text) {
-      lastActivityRef.current = Date.now();
-    }
     setInterimText(text);
   }, []);
 
   // Demo question chip — inject as customer line + immediately send to AI
   const handleDemoQuestion = useCallback((text: string) => {
     if (!callActive) return;
-    lastActivityRef.current = Date.now();
-    silenceFiredRef.current = false;
     addLine('customer', text);
     if (aiDebounceRef.current) clearTimeout(aiDebounceRef.current);
     accumulatedSpeechRef.current = '';
@@ -825,13 +774,7 @@ export default function OperatorPage() {
             <span className="text-[10px] bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full">
               {customerLines.length}
             </span>
-            {callActive && silenceMs > SILENCE_THRESHOLD_MS && (
-              <span className="ml-auto flex items-center gap-1 text-[9px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
-                <span className="w-1 h-1 bg-amber-400 rounded-full animate-pulse" />
-                SUKUNAT · {(silenceMs / 1000).toFixed(1)}s
-              </span>
-            )}
-            {callActive && silenceMs <= SILENCE_THRESHOLD_MS && (
+            {callActive && (
               <span className="ml-auto flex items-center gap-1 text-[9px] font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full">
                 <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
                 JONLI
