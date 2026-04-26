@@ -2,7 +2,7 @@
 
 # ⚡Yulduz AI & Telephony Assistant
 
-### SQB bank call-center operatorlari uchun real-time AI copilot
+### SQB bank call-center operatorlari uchun real-time AI yordamchi
 
 <br />
 
